@@ -12,10 +12,11 @@ function ToDoList() {
     setCategory(event.currentTarget.value as any);
   };
   useEffect(() => {
-    setToDos(() => {
+    setToDos((oldToDos) => {
       const savedToDos = JSON.parse(localStorage.getItem("toDos")||"{}");
       return [
-        ...savedToDos
+        ...savedToDos,
+        ...oldToDos
       ]
     });
   }, []);
