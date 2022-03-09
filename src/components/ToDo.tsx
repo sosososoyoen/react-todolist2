@@ -1,9 +1,10 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "./atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Categories, IToDo, toDoSelector, toDoState } from "./atoms";
 
 
 function ToDo({ text, category, id }: IToDo) {
+  const toDos = useRecoilValue(toDoState);
   const setToDos = useSetRecoilState(toDoState);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
@@ -18,6 +19,7 @@ function ToDo({ text, category, id }: IToDo) {
         ...oldToDos.slice(targetIndex+1),
       ];
     });
+
   };
   return (
     <li>
