@@ -1,31 +1,51 @@
-import { atom, selector } from "recoil"
+import { atom, DefaultValue, selector } from "recoil"
 
 
-export enum Categories {
-    "TO_DO" = "TO_DO",
-    "DOING"="DOING",
-    "DONE"="DONE"
+const localStorageEffect =
+  (key: any) =>
+  ({ setSelf, onSet }: any) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue !== null) {
+      setSelf(JSON.parse(savedValue));
+    }
+
+    onSet((newValue: IToDo) => {
+      if (newValue instanceof DefaultValue) {
+        localStorage.removeItem(key);
+      } else {
+        localStorage.setItem(key, JSON.stringify(newValue));
+      }
+    });
+  };
+
+//카테고리의 타입 
+export interface Categories {
+  name: string;
 }
 
 export interface IToDo {
   text: string;
   id: number;
-  category: Categories;
+  //카테고리는 Categories enum 중 하나임;
+  category: string;
 }
 
-export const categoryState = atom<Categories>({
+export const categoryState = atom({
     key:"category",
-    default:Categories.TO_DO
+    default:"TO_DO",
+})
+
+export const categoryList = atom<Categories[]>({
+  key:"categories",
+  default:[{ name: "TO_DO" }, { name: "DOING" }, { name: "DONE" }],
+  effects_UNSTABLE: [localStorageEffect("categories")],
 })
 
 export const toDoState = atom<IToDo[]>({
   key: "toDo",
   default: [],
 });
-export const doingState = atom<IToDo[]>({
-  key: "doing",
-  default: [],
-});
+
 
 export const toDoSelector = selector({
   key: "toDoSelector",
