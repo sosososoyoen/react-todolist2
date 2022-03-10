@@ -11,12 +11,11 @@ function ToDoList() {
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
     setCategory(event.currentTarget.value as any);
   };
+  const savedToDos = JSON.parse(localStorage.getItem("toDos")||"{}");
   useEffect(() => {
-    setToDos((oldToDos) => {
-      const savedToDos = JSON.parse(localStorage.getItem("toDos")||"{}");
+    setToDos(() => {
       return [
-        ...savedToDos,
-        ...oldToDos
+        ...savedToDos
       ]
     });
   }, []);

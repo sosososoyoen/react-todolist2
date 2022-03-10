@@ -17,7 +17,9 @@ function CreateToDo() {
     ]);
     setValue("toDo", "");
   };
-  localStorage.setItem("toDos",JSON.stringify(toDos));
+  useEffect(() => {
+    localStorage.setItem("toDos",JSON.stringify(toDos));
+  }, [toDos]);
   return (
     <form onSubmit={handleSubmit(handleValid)}>
       <input {...register("toDo")} placeholder="할일적어" />
